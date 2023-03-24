@@ -1,0 +1,68 @@
+#root {
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.lightBackground {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  animation: hideBg 5s forwards;
+  background: linear-gradient(
+    #75d5e3 0%,
+    #8ae5ff 25%,
+    #acf5fb 50%,
+    #c3fbf9 75%,
+    #cdf9ff 100%
+  );
+}
+
+.darkBackground {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  animation: showBg 5s forwards;
+  background: linear-gradient(
+    #131862 0%,
+    #2e4482 50%,
+    #546bab 75%,
+    #bea9de 100%
+  );
+}
+
+@keyframes hideBg {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes showBg {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
