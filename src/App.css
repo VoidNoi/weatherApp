@@ -16,7 +16,7 @@ main {
   overflow: hidden;
 }
 
-.lightBackground {
+/* .lightBackground {
   position: absolute;
   height: 100vh;
   width: 100vw;
@@ -28,7 +28,7 @@ main {
     #c3fbf9 75%,
     #cdf9ff 100%
   );
-}
+} */
 
 .darkBackground {
   position: absolute;
@@ -51,7 +51,7 @@ main {
     opacity: 0;
   }
 }
-
+/* 
 @keyframes showBg {
   0% {
     opacity: 0;
@@ -59,7 +59,7 @@ main {
   100% {
     opacity: 1;
   }
-}
+} */
 
 canvas {
   position: absolute;
