@@ -2,109 +2,103 @@ import React, { useRef, useEffect } from 'react';
 
 const Background = () => {
   const canvasRef = useRef(null);
-  const animationRef = useRef();
-
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
+  const bufferRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    const bufferCanvas = bufferRef.current;
     const ctx = canvas.getContext('2d');
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const bufferCtx = bufferCanvas.getContext('2d');
+    let requestId;
 
-    ctx.canvas.width = width;
-    ctx.canvas.height = height;
-    ctx.fillStyle = '#FFFFFF';
-    // let alpha = 1;
-    // const randomWidth = getRandomInt(width);
-    // const randomHeight = getRandomInt(height);
-    // const drawStar = () => {
-    // let speed = 0.1;
-    // setTimeout(() => {
-    //   alpha -= speed;
-    //   if (alpha <= 0 || alpha >= 1) {
-    //     speed = -speed;
-    //   }
-    // }, 2000);
-    // ctx.clearRect(0, 0, width, height);
-    // ctx.globalAlpha = alpha;
-    // ctx.filter = 'blur(2px)';
-    //   ctx.beginPath();
-    //   ctx.arc(randomWidth, randomHeight, 2, 0, 2 * Math.PI);
-    //   ctx.closePath();
-    //   ctx.fill();
-    // animationRef.current = requestAnimationFrame(drawStar);
-    // };
-    class Star {
-      constructor(data) {
-        this.data = data;
-        // this.alpha = 1;
-      }
-      draw() {
-        let speed = 0.1;
-        setTimeout(() => {
-          this.data.alpha -= speed;
-          if (this.data.alpha <= 0) {
-            this.data.alpha = 0;
-            // speed = -speed;
-          }
-        }, getRandomInt(5000));
-        ctx.globalAlpha = this.data.alpha;
-        ctx.filter = 'blur(2px)';
-        ctx.beginPath();
-        ctx.arc(this.data.width, this.data.height, 2, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.closePath();
-        ctx.fill();
-      }
-    }
+    const circles = [];
 
-    let stars = [];
-    stars.push(
-      new Star({
-        width: getRandomInt(width),
-        height: getRandomInt(height),
-        alpha: 1,
-      })
-    );
-    setInterval(() => {
-      if (stars.length < 20) {
-        stars.push(
-          new Star({
-            width: getRandomInt(width),
-            height: getRandomInt(height),
-            alpha: 1,
-          })
-        );
+    const addCircle = () => {
+      const circle = {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        opacity: 0,
+        fadeInTime: Math.random() * 5000,
+        maxOpacityTime: Math.random() * 5000,
+        fadeOutTime: Math.random() * 5000,
+        fadeInSpeed: Math.random() * 0.01 + 0.01,
+        fadeOutSpeed: Math.random() * 0.01 + 0.01,
+        size: 2,
+      };
+      const overlap = circles.some(
+        (c) => Math.hypot(circle.x - c.x, circle.y - c.y) < c.size + circle.size
+      );
+      if (!overlap) {
+        circles.push(circle);
       }
-      console.log(stars);
-    }, 1000);
-    // if (stars[0].data.alpha <= 0) {
-    //   stars.shift();
-    // }
+    };
 
-    function animate() {
-      requestAnimationFrame(animate);
-      ctx.clearRect(0, 0, width, height);
-      stars.forEach((item, index) => {
-        item.draw();
-        if (item.data.alpha <= 0) {
-          stars.splice(index, 1);
+    const drawCircle = (circle) => {
+      bufferCtx.beginPath();
+      bufferCtx.arc(circle.x, circle.y, circle.size, 0, 2 * Math.PI);
+      bufferCtx.fillStyle = `rgba(255, 255, 255, ${circle.opacity})`;
+      bufferCtx.filter = 'blur(2px)';
+      bufferCtx.shadowColor = 'white';
+      bufferCtx.fill();
+    };
+
+    const updateCircles = () => {
+      bufferCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // add a new circle every 100ms
+      if (Math.random() < 0.1) {
+        addCircle();
+      }
+
+      // update all circles
+      circles.forEach((circle) => {
+        if (circle.opacity < 1 && circle.fadeInTime > 0) {
+          circle.opacity += circle.fadeInSpeed;
+          circle.fadeInTime -= 16.7;
+        } else if (circle.maxOpacityTime > 0) {
+          circle.maxOpacityTime -= 16.7;
+        } else if (circle.opacity > 0 && circle.fadeOutTime > 0) {
+          circle.opacity -= circle.fadeOutSpeed;
+          circle.fadeOutTime -= 16.7;
+        } else {
+          const index = circles.indexOf(circle);
+          circles.splice(index, 1);
         }
+        drawCircle(circle);
       });
-    }
-    animate();
-    // animationRef.current = requestAnimationFrame(drawStar);
-    return () => cancelAnimationFrame(animationRef.current);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(bufferCanvas, 0, 0);
+      requestId = requestAnimationFrame(updateCircles);
+    };
+
+    bufferCanvas.width = canvas.width;
+    bufferCanvas.height = canvas.height;
+    bufferCtx.imageSmoothingEnabled = true;
+
+    canvas.style.transform = 'translateZ(0)';
+
+    updateCircles();
+
+    return () => {
+      cancelAnimationFrame(requestId);
+    };
   }, []);
 
   return (
     <div>
       <div className='lightBackground'></div>
       <div className='darkBackground'></div>
-      <canvas ref={canvasRef} />
+      <canvas
+        ref={canvasRef}
+        width={window.innerWidth}
+        height={window.innerHeight}
+      />
+      <canvas
+        ref={bufferRef}
+        width={window.innerWidth}
+        height={window.innerHeight}
+      />
     </div>
   );
 };
