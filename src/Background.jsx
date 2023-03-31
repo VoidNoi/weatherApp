@@ -38,7 +38,6 @@ const Background = () => {
       bufferCtx.arc(circle.x, circle.y, circle.size, 0, 2 * Math.PI);
       bufferCtx.fillStyle = `rgba(255, 255, 255, ${circle.opacity})`;
       bufferCtx.filter = 'blur(2px)';
-      bufferCtx.shadowColor = 'white';
       bufferCtx.fill();
     };
 
