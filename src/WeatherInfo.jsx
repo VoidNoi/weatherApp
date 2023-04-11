@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import WeatherApi from './WeatherApi';
+import {
+  kelvinToCelsius,
+  celsiusToFahrenheit,
+  fahrenheitToCelsius,
+  mpsToKmph,
+  kmphToMph,
+  mphToKmph,
+} from './Convert';
+import arrow from './assets/arrow.png';
 
 const WeatherInfo = () => {
   const [tempUnit, setTempUnit] = useState('C');
@@ -7,23 +16,16 @@ const WeatherInfo = () => {
   const [wind, setWind] = useState();
   const [weatherType, setWeatherType] = useState();
 
-  const kelvinToCelsius = (temperature) => {
-    return Math.floor(temperature - 273);
-  };
-  const celsiusToFahrenheit = (temperature) => {
-    return Math.floor(temperature * 1.8 + 32);
-  };
-  const fahrenheitToCelsius = (temperature) => {
-    return Math.floor((temperature - 32) / 1.8);
-  };
-
   const changeTempUnit = (unit) => {
     const forecastCopy = forecast;
+    const windCopy = wind;
     if (unit === 'C') {
       forecastCopy.temp = celsiusToFahrenheit(forecastCopy.temp);
+      windCopy.speed = kmphToMph(windCopy.speed);
       setTempUnit('F');
     } else if (unit === 'F') {
       forecastCopy.temp = fahrenheitToCelsius(forecastCopy.temp);
+      windCopy.speed = mphToKmph(windCopy.speed);
       setTempUnit('C');
     }
     setForecast(forecastCopy);
@@ -31,9 +33,9 @@ const WeatherInfo = () => {
 
   const setData = async () => {
     const data = await WeatherApi();
-    const dataMain = data.main;
-    dataMain.temp = kelvinToCelsius(dataMain.temp);
-    setForecast(dataMain);
+    data.main.temp = kelvinToCelsius(data.main.temp);
+    data.wind.speed = mpsToKmph(data.wind.speed);
+    setForecast(data.main);
     setWind(data.wind);
     setWeatherType(data.weather[0].main);
   };
@@ -48,20 +50,36 @@ const WeatherInfo = () => {
     return (
       <section className='weatherInfo'>
         <div className='infoMiddle'>
-          <b>{temp}</b>
-          <button
-            onClick={() =>
-              tempUnit == 'C' ? changeTempUnit('C') : changeTempUnit('F')
-            }
-          >
-            {tempUnit + 'º'}
-          </button>
-          <div>
-            <span>Humidity: {humidity}%</span>
-            <span>Wind: {speed}</span>
+          <div className='tempCont'>
+            <b className='temperature'>{temp}</b>
+            <button
+              className='tempBtn'
+              onClick={() =>
+                tempUnit == 'C' ? changeTempUnit('C') : changeTempUnit('F')
+              }
+            >
+              {'º' + tempUnit}
+            </button>
           </div>
         </div>
-        {weatherType}
+        <b className='weatherType'>{weatherType}</b>
+        <div className='extraInfoCont'>
+          <div className='extraInfo'>
+            <b>Humidity</b>
+            <span>{humidity}%</span>
+          </div>{' '}
+          <div className='extraInfo'>
+            <b>Wind</b>
+            <img
+              className='arrowImg'
+              src={arrow}
+              style={{ transform: `rotate(${deg}deg)` }}
+              alt=''
+            />
+            {speed}
+            {tempUnit == 'C' ? ' km/h' : ' mph'}
+          </div>
+        </div>
       </section>
     );
   }

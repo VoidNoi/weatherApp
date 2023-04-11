@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&family=Roboto&display=swap');
 
 #root {
   margin: 0 auto;
@@ -70,11 +70,55 @@ canvas {
 }
 
 .weatherInfo {
+  color: white;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-family: 'Roboto', sans-serif;
 }
 
-.infoMiddle {
+.tempCont {
+}
+
+.temperature {
+  font-size: 100px;
+}
+
+.tempBtn {
+  background: none;
+  color: white;
+  border: none;
+  font-size: 25px;
+}
+
+.tempBtn:hover {
+  cursor: pointer;
+}
+
+.weatherType {
+  font-size: 20px;
+}
+
+.extraInfoCont {
+  display: flex;
+  margin-top: 20px;
+  background-color: rgba(255, 255, 255, 0.068);
+  border-radius: 10px;
+  height: 100px;
+  width: 400px;
+  justify-content: space-evenly;
+}
+
+.extraInfo {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: space-evenly;
+}
+
+.arrowImg {
+  width: 42px;
+  height: 42px;
+  align-self: center;
 }
