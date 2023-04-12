@@ -10,7 +10,7 @@ import {
 } from './Convert';
 import arrow from './assets/arrow.png';
 
-const WeatherInfo = () => {
+const WeatherInfo = ({ isDayTime }) => {
   const [tempUnit, setTempUnit] = useState('C');
   const [forecast, setForecast] = useState();
   const [wind, setWind] = useState();
@@ -19,6 +19,7 @@ const WeatherInfo = () => {
   const changeTempUnit = (unit) => {
     const forecastCopy = forecast;
     const windCopy = wind;
+
     if (unit === 'C') {
       forecastCopy.temp = celsiusToFahrenheit(forecastCopy.temp);
       windCopy.speed = kmphToMph(windCopy.speed);
@@ -28,6 +29,7 @@ const WeatherInfo = () => {
       windCopy.speed = mphToKmph(windCopy.speed);
       setTempUnit('C');
     }
+
     setForecast(forecastCopy);
   };
 
@@ -35,9 +37,25 @@ const WeatherInfo = () => {
     const data = await WeatherApi();
     data.main.temp = kelvinToCelsius(data.main.temp);
     data.wind.speed = mpsToKmph(data.wind.speed);
+
     setForecast(data.main);
     setWind(data.wind);
     setWeatherType(data.weather[0].main);
+  };
+
+  const getDirection = (angle) => {
+    var directions = [
+      'North',
+      'North-East',
+      'East',
+      'South-East',
+      'South',
+      'South-West',
+      'West',
+      'North-West',
+    ];
+    var index = Math.round(((angle %= 360) < 0 ? angle + 360 : angle) / 45) % 8;
+    return directions[index];
   };
 
   useEffect(() => {
@@ -45,8 +63,9 @@ const WeatherInfo = () => {
   }, []);
 
   if (forecast != undefined) {
-    const { temp, humidity, pressure } = forecast;
-    const { deg, gust, speed } = wind;
+    const { temp, humidity } = forecast;
+    const { deg, speed } = wind;
+
     return (
       <section className='weatherInfo'>
         <div className='infoMiddle'>
@@ -63,7 +82,11 @@ const WeatherInfo = () => {
           </div>
         </div>
         <b className='weatherType'>{weatherType}</b>
-        <div className='extraInfoCont'>
+        <div
+          className={`extraInfoCont ${
+            isDayTime ? 'extraInfoDay' : 'extraInfoNight'
+          }`}
+        >
           <div className='extraInfo'>
             <b>Humidity</b>
             <span>{humidity}%</span>
@@ -73,8 +96,10 @@ const WeatherInfo = () => {
             <img
               className='arrowImg'
               src={arrow}
-              style={{ transform: `rotate(${deg}deg)` }}
-              alt=''
+              style={{
+                transform: `rotate(${deg + 100}deg)`,
+              }}
+              alt={`Wind coming from ${getDirection(deg)}`}
             />
             {speed}
             {tempUnit == 'C' ? ' km/h' : ' mph'}

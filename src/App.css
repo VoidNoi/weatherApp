@@ -18,19 +18,26 @@ main {
   overflow: hidden;
 }
 
-/* .lightBackground {
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  animation: hideBg 5s forwards;
-  background: linear-gradient(
+/* linear-gradient(
     #75d5e3 0%,
     #8ae5ff 25%,
     #acf5fb 50%,
     #c3fbf9 75%,
     #cdf9ff 100%
+  ); */
+
+.lightBackground {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  animation: hideBg 5s forwards;
+  background: linear-gradient(
+    #5fc3d3 0%,
+    #78c7dd 50%,
+    #96dae0 75%,
+    #cdf9ff 100%
   );
-} */
+}
 
 .darkBackground {
   position: absolute;
@@ -45,16 +52,16 @@ main {
   );
 }
 
-@keyframes hideBg {
+/* @keyframes hideBg {
   0% {
     opacity: 1;
   }
   100% {
     opacity: 0;
   }
-}
-/* 
-@keyframes showBg {
+} */
+
+/* @keyframes showBg {
   0% {
     opacity: 0;
   }
@@ -76,9 +83,6 @@ canvas {
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Roboto', sans-serif;
-}
-
-.tempCont {
 }
 
 .temperature {
@@ -103,11 +107,17 @@ canvas {
 .extraInfoCont {
   display: flex;
   margin-top: 20px;
-  background-color: rgba(255, 255, 255, 0.068);
   border-radius: 10px;
   height: 100px;
   width: 400px;
   justify-content: space-evenly;
+}
+.extraInfoDay {
+  background-color: rgba(0, 0, 0, 0.178);
+}
+
+.extraInfoNight {
+  background-color: rgba(255, 255, 255, 0.068);
 }
 
 .extraInfo {
