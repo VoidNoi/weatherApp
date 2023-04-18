@@ -2,16 +2,14 @@ import React, { useRef, useEffect } from 'react';
 
 const Stars = () => {
   const canvasRef = useRef(null);
-  const bufferRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const bufferCanvas = bufferRef.current;
+
     const ctx = canvas.getContext('2d');
-    const bufferCtx = bufferCanvas.getContext('2d');
     let requestId;
 
-    const circles = [];
+    let circles = [];
 
     const addCircle = () => {
       const circle = {
@@ -34,15 +32,15 @@ const Stars = () => {
     };
 
     const drawCircle = (circle) => {
-      bufferCtx.beginPath();
-      bufferCtx.arc(circle.x, circle.y, circle.size, 0, 2 * Math.PI);
-      bufferCtx.fillStyle = `rgba(255, 255, 255, ${circle.opacity})`;
-      bufferCtx.filter = 'blur(2px)';
-      bufferCtx.fill();
+      ctx.beginPath();
+      ctx.arc(circle.x, circle.y, circle.size, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(255, 255, 255, ${circle.opacity})`;
+      ctx.filter = 'blur(2px)';
+      ctx.fill();
     };
 
     const updateCircles = () => {
-      bufferCtx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // add a new circle every 100ms
       if (Math.random() < 0.1) {
@@ -50,7 +48,8 @@ const Stars = () => {
       }
 
       // update all circles
-      circles.forEach((circle) => {
+      circles.forEach((circle, index) => {
+        const circlesCopy = circles.slice();
         if (circle.opacity < 1 && circle.fadeInTime > 0) {
           circle.opacity += circle.fadeInSpeed;
           circle.fadeInTime -= 16.7;
@@ -60,22 +59,16 @@ const Stars = () => {
           circle.opacity -= circle.fadeOutSpeed;
           circle.fadeOutTime -= 16.7;
         } else {
-          const index = circles.indexOf(circle);
-          circles.splice(index, 1);
+          setTimeout(() => {
+            circlesCopy.splice(index, 1);
+          }, 0);
+          circles = circlesCopy;
         }
         drawCircle(circle);
       });
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(bufferCanvas, 0, 0);
       requestId = requestAnimationFrame(updateCircles);
     };
-
-    bufferCanvas.width = canvas.width;
-    bufferCanvas.height = canvas.height;
-    bufferCtx.imageSmoothingEnabled = true;
-
-    canvas.style.transform = 'translateZ(0)';
 
     updateCircles();
 
@@ -88,11 +81,6 @@ const Stars = () => {
     <>
       <canvas
         ref={canvasRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
-      />
-      <canvas
-        ref={bufferRef}
         width={window.innerWidth}
         height={window.innerHeight}
       />

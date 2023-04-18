@@ -8,16 +8,15 @@ const Clouds = () => {
     const ctx = canvas.getContext('2d');
     let requestId;
 
-    const clouds = [];
+    let clouds = [];
 
     const addCloud = () => {
       const cloud = {
-        x: 100,
+        x: -100,
         y: Math.random() * canvas.height,
-        speed: Math.random() * 10,
+        speed: Math.random() * (3 - 2) + 2,
       };
-
-      if (clouds.length < 5) {
+      if (clouds.length < 10) {
         clouds.push(cloud);
       }
     };
@@ -45,11 +44,14 @@ const Clouds = () => {
         addCloud();
       }
 
-      clouds.forEach((cloud) => {
-        if (cloud.x > canvas.width) {
-          const index = clouds.indexOf(cloud);
-          clouds.splice(index, 1);
-        } else if (cloud.x < canvas.width) {
+      clouds.forEach((cloud, index) => {
+        const cloudsCopy = clouds.slice();
+        if (cloud.x >= canvas.width + 150) {
+          setTimeout(() => {
+            cloudsCopy.splice(index, 1);
+          }, 0);
+          clouds = cloudsCopy;
+        } else if (cloud.x < canvas.width + 150) {
           cloud.x += cloud.speed;
         }
         drawCloud(cloud);
