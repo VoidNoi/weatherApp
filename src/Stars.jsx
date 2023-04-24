@@ -78,13 +78,11 @@ const Stars = () => {
   }, []);
 
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
-      />
-    </>
+    <canvas
+      ref={canvasRef}
+      width={window.innerWidth}
+      height={window.innerHeight}
+    />
   );
 };
 

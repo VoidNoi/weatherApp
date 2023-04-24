@@ -12,17 +12,19 @@ const Clouds = () => {
 
     const addCloud = () => {
       const cloud = {
-        x: -100,
+        x: Math.floor(Math.random() * 1000) - 1100,
         y: Math.random() * canvas.height,
         speed: Math.random() * (3 - 2) + 2,
       };
-      if (clouds.length < 10) {
+
+      if (clouds.length < 20) {
         clouds.push(cloud);
       }
     };
 
     const drawCloud = (cloud) => {
       const { x, y } = cloud;
+
       ctx.beginPath();
       ctx.arc(x, y, 25, Math.PI * 0.5, Math.PI * 1.5);
       ctx.arc(x + 30, y - 25, 30, Math.PI * 1, Math.PI * 1.85);
@@ -46,6 +48,7 @@ const Clouds = () => {
 
       clouds.forEach((cloud, index) => {
         const cloudsCopy = clouds.slice();
+
         if (cloud.x >= canvas.width + 150) {
           setTimeout(() => {
             cloudsCopy.splice(index, 1);
@@ -54,24 +57,25 @@ const Clouds = () => {
         } else if (cloud.x < canvas.width + 150) {
           cloud.x += cloud.speed;
         }
+
         drawCloud(cloud);
       });
       requestId = requestAnimationFrame(updateClouds);
     };
+
     updateClouds();
+
     return () => {
       cancelAnimationFrame(requestId);
     };
   }, []);
 
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
-      ></canvas>
-    </>
+    <canvas
+      ref={canvasRef}
+      width={window.innerWidth}
+      height={window.innerHeight}
+    ></canvas>
   );
 };
 
