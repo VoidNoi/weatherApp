@@ -1,19 +1,19 @@
 import React, { useRef, useEffect } from 'react';
 
 const Clouds = () => {
-  const canvasRef = useRef(null);
+  const cloudsRef = useRef(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    let requestId;
+    const cloudsCanvas = cloudsRef.current;
+    const cloudsCtx = cloudsCanvas.getContext('2d');
+    let cloudsId;
 
     let clouds = [];
 
     const addCloud = () => {
       const cloud = {
         x: Math.floor(Math.random() * 1000) - 1100,
-        y: Math.random() * canvas.height,
+        y: Math.random() * cloudsCanvas.height,
         speed: Math.random() * (3 - 2) + 2,
       };
 
@@ -25,22 +25,22 @@ const Clouds = () => {
     const drawCloud = (cloud) => {
       const { x, y } = cloud;
 
-      ctx.beginPath();
-      ctx.arc(x, y, 25, Math.PI * 0.5, Math.PI * 1.5);
-      ctx.arc(x + 30, y - 25, 30, Math.PI * 1, Math.PI * 1.85);
-      ctx.arc(x + 66, y - 17.5, 20, Math.PI * 1.37, Math.PI * 1.91);
-      ctx.arc(x + 89, y, 23, Math.PI * 1.5, Math.PI * 0.5);
-      ctx.moveTo(x + 90, y + 23);
-      ctx.lineTo(x, y + 25);
-      ctx.strokeStyle = 'rgba(255, 255, 255,0)';
-      ctx.stroke();
-      ctx.filter = 'blur(10px)';
-      ctx.fillStyle = 'rgba(255, 255, 255,1)';
-      ctx.fill();
+      cloudsCtx.beginPath();
+      cloudsCtx.arc(x, y, 25, Math.PI * 0.5, Math.PI * 1.5);
+      cloudsCtx.arc(x + 30, y - 25, 30, Math.PI * 1, Math.PI * 1.85);
+      cloudsCtx.arc(x + 66, y - 17.5, 20, Math.PI * 1.37, Math.PI * 1.91);
+      cloudsCtx.arc(x + 89, y, 23, Math.PI * 1.5, Math.PI * 0.5);
+      cloudsCtx.moveTo(x + 90, y + 23);
+      cloudsCtx.lineTo(x, y + 25);
+      cloudsCtx.strokeStyle = 'rgba(255, 255, 255,0)';
+      cloudsCtx.stroke();
+      cloudsCtx.filter = 'blur(10px)';
+      cloudsCtx.fillStyle = 'rgba(255, 255, 255,1)';
+      cloudsCtx.fill();
     };
 
     const updateClouds = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      cloudsCtx.clearRect(0, 0, cloudsCanvas.width, cloudsCanvas.height);
 
       if (Math.random() < 0.1) {
         addCloud();
@@ -49,30 +49,30 @@ const Clouds = () => {
       clouds.forEach((cloud, index) => {
         const cloudsCopy = clouds.slice();
 
-        if (cloud.x >= canvas.width + 150) {
+        if (cloud.x >= cloudsCanvas.width + 150) {
           setTimeout(() => {
             cloudsCopy.splice(index, 1);
           }, 0);
           clouds = cloudsCopy;
-        } else if (cloud.x < canvas.width + 150) {
+        } else if (cloud.x < cloudsCanvas.width + 150) {
           cloud.x += cloud.speed;
         }
 
         drawCloud(cloud);
       });
-      requestId = requestAnimationFrame(updateClouds);
+      cloudsId = requestAnimationFrame(updateClouds);
     };
 
     updateClouds();
 
     return () => {
-      cancelAnimationFrame(requestId);
+      cancelAnimationFrame(cloudsId);
     };
   }, []);
 
   return (
     <canvas
-      ref={canvasRef}
+      ref={cloudsRef}
       width={window.innerWidth}
       height={window.innerHeight}
     ></canvas>

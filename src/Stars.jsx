@@ -1,20 +1,20 @@
 import React, { useRef, useEffect } from 'react';
 
 const Stars = () => {
-  const canvasRef = useRef(null);
+  const starsRef = useRef(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const starsCanvas = starsRef.current;
 
-    const ctx = canvas.getContext('2d');
-    let requestId;
+    const starsCtx = starsCanvas.getContext('2d');
+    let starsId;
 
     let circles = [];
 
     const addCircle = () => {
       const circle = {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: Math.random() * starsCanvas.width,
+        y: Math.random() * starsCanvas.height,
         opacity: 0,
         fadeInTime: Math.random() * 5000,
         maxOpacityTime: Math.random() * 5000,
@@ -32,15 +32,15 @@ const Stars = () => {
     };
 
     const drawCircle = (circle) => {
-      ctx.beginPath();
-      ctx.arc(circle.x, circle.y, circle.size, 0, 2 * Math.PI);
-      ctx.fillStyle = `rgba(255, 255, 255, ${circle.opacity})`;
-      ctx.filter = 'blur(2px)';
-      ctx.fill();
+      starsCtx.beginPath();
+      starsCtx.arc(circle.x, circle.y, circle.size, 0, 2 * Math.PI);
+      starsCtx.fillStyle = `rgba(255, 255, 255, ${circle.opacity})`;
+      starsCtx.filter = 'blur(2px)';
+      starsCtx.fill();
     };
 
     const updateCircles = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
 
       // add a new circle every 100ms
       if (Math.random() < 0.1) {
@@ -67,19 +67,19 @@ const Stars = () => {
         drawCircle(circle);
       });
 
-      requestId = requestAnimationFrame(updateCircles);
+      starsId = requestAnimationFrame(updateCircles);
     };
 
     updateCircles();
 
     return () => {
-      cancelAnimationFrame(requestId);
+      cancelAnimationFrame(starsId);
     };
   }, []);
 
   return (
     <canvas
-      ref={canvasRef}
+      ref={starsRef}
       width={window.innerWidth}
       height={window.innerHeight}
     />
