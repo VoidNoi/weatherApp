@@ -4,26 +4,53 @@ import Clouds from './Clouds';
 import Lightning from './Lightning';
 import Rain from './Rain';
 
-const Background = ({ isDayTime }) => {
+const Background = ({ isDayTime, weatherType }) => {
+  let dayTime = isDayTime ? 'day' : 'night';
+
   const randomInt = (min, max) => {
     return Math.random() * (max - min + 1) + min;
   };
 
-  return (
-    <>
-      {isDayTime ? (
-        <div className='lightBackground'>
-          <Clouds />
-        </div>
-      ) : (
-        <div className='darkBackground'>
+  const forecasts = [
+    {
+      conditions: ['Clouds', 'Mist', 'Haze'],
+      background: dayTime,
+      animation: <Clouds />,
+    },
+    {
+      conditions: ['Drizzle', 'Rain'],
+      background: dayTime,
+      animation: <Rain randomInt={randomInt} />,
+    },
+    {
+      conditions: ['Thunderstorm'],
+      background: 'storm',
+      animation: (
+        <>
           <Rain randomInt={randomInt} />
           <Lightning randomInt={randomInt} />
-          {/* <Stars /> */}
-        </div>
-      )}
-    </>
-  );
+        </>
+      ),
+    },
+    {
+      conditions: ['Clear'],
+      background: dayTime,
+      animation: isDayTime ? '' : <Stars />,
+    },
+  ];
+
+  const getForecast = () => {
+    for (const forecast of forecasts) {
+      if (forecast.conditions.includes(weatherType)) {
+        return (
+          <div className={`background ${forecast.background}`}>
+            {forecast.animation}
+          </div>
+        );
+      }
+    }
+  };
+  return getForecast();
 };
 
 export default Background;

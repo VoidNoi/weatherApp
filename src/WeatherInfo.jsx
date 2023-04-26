@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import WeatherApi from './WeatherApi';
 import {
-  kelvinToCelsius,
   celsiusToFahrenheit,
   fahrenheitToCelsius,
-  mpsToKmph,
   kmphToMph,
   mphToKmph,
 } from './Convert';
 import arrow from './assets/arrow.png';
 
-const WeatherInfo = ({ isDayTime }) => {
+const WeatherInfo = ({
+  isDayTime,
+  setData,
+  forecast,
+  setForecast,
+  wind,
+  weatherType,
+}) => {
   const [tempUnit, setTempUnit] = useState('C');
-  const [forecast, setForecast] = useState();
-  const [wind, setWind] = useState();
-  const [weatherType, setWeatherType] = useState();
 
   const changeTempUnit = (unit) => {
     const forecastCopy = forecast;
@@ -31,16 +32,6 @@ const WeatherInfo = ({ isDayTime }) => {
     }
 
     setForecast(forecastCopy);
-  };
-
-  const setData = async () => {
-    const data = await WeatherApi();
-    data.main.temp = kelvinToCelsius(data.main.temp);
-    data.wind.speed = mpsToKmph(data.wind.speed);
-
-    setForecast(data.main);
-    setWind(data.wind);
-    setWeatherType(data.weather[0].main);
   };
 
   const getDirection = (angle) => {

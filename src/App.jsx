@@ -1,8 +1,16 @@
+import React, { useState } from 'react';
+
 import './App.css';
 import Background from './Background';
 import WeatherInfo from './WeatherInfo';
+import WeatherApi from './WeatherApi';
+import { kelvinToCelsius, mpsToKmph } from './Convert';
 
 function App() {
+  const [forecast, setForecast] = useState();
+  const [wind, setWind] = useState();
+  const [weatherType, setWeatherType] = useState();
+
   const isDst = () => {
     Date.prototype.stdTimezoneOffset = function () {
       var jan = new Date(this.getFullYear(), 0, 1);
@@ -33,10 +41,27 @@ function App() {
 
   isDayTime = hours > dawn && hours < dusk;
 
+  const setData = async () => {
+    const data = await WeatherApi();
+    data.main.temp = kelvinToCelsius(data.main.temp);
+    data.wind.speed = mpsToKmph(data.wind.speed);
+
+    setForecast(data.main);
+    setWind(data.wind);
+    setWeatherType(data.weather[0].main);
+  };
+
   return (
     <main className='App'>
-      <Background isDayTime={isDayTime} />
-      <WeatherInfo isDayTime={isDayTime} />
+      <Background isDayTime={isDayTime} weatherType={weatherType} />
+      <WeatherInfo
+        isDayTime={isDayTime}
+        setData={setData}
+        forecast={forecast}
+        setForecast={setForecast}
+        wind={wind}
+        weatherType={weatherType}
+      />
     </main>
   );
 }
