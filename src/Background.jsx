@@ -3,6 +3,7 @@ import Stars from './Stars';
 import Clouds from './Clouds';
 import Lightning from './Lightning';
 import Rain from './Rain';
+import Snow from './Snow';
 
 const Background = ({ isDayTime, weatherType }) => {
   let dayTime = isDayTime ? 'day' : 'night';
@@ -36,6 +37,11 @@ const Background = ({ isDayTime, weatherType }) => {
       conditions: ['Clear'],
       background: dayTime,
       animation: isDayTime ? '' : <Stars />,
+    },
+    {
+      conditions: ['Snow'],
+      background: dayTime,
+      animation: <Snow randomInt={randomInt} />,
     },
   ];
 
