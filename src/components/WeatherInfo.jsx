@@ -4,8 +4,8 @@ import {
   fahrenheitToCelsius,
   kmphToMph,
   mphToKmph,
-} from './Convert';
-import arrow from './assets/arrow.png';
+} from '../utils/Convert';
+import arrow from '../assets/arrow.png';
 
 const WeatherInfo = ({
   isDayTime,

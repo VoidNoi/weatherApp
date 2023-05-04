@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 import './App.css';
-import Background from './Background';
-import WeatherInfo from './WeatherInfo';
-import WeatherApi from './WeatherApi';
-import { kelvinToCelsius, mpsToKmph } from './Convert';
+import Background from './components/Background';
+import WeatherInfo from './components/WeatherInfo';
+import WeatherApi from './utils/WeatherApi';
+import { kelvinToCelsius, mpsToKmph } from './utils/Convert';
 
 function App() {
   const [forecast, setForecast] = useState();

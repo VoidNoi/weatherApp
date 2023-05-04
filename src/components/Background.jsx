@@ -1,9 +1,9 @@
 import React from 'react';
-import Stars from './Stars';
-import Clouds from './Clouds';
-import Lightning from './Lightning';
-import Rain from './Rain';
-import Snow from './Snow';
+import Stars from '../backgrounds/Stars';
+import Clouds from '../backgrounds/Clouds';
+import Lightning from '../backgrounds/Lightning';
+import Rain from '../backgrounds/Rain';
+import Snow from '../backgrounds/Snow';
 
 const Background = ({ isDayTime, weatherType }) => {
   let dayTime = isDayTime ? 'day' : 'night';
