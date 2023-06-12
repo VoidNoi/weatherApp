@@ -1,12 +1,15 @@
 import React, { useRef, useEffect } from 'react';
 
-const Snow = ({ randomInt }) => {
+const Snow = ({ randomInt, width, height }) => {
   const snowRef = useRef(null);
 
   useEffect(() => {
     const snowCanvas = snowRef.current;
     const snowCtx = snowCanvas.getContext('2d');
     let snowId;
+
+    snowCanvas.width = width;
+    snowCanvas.height = height;
 
     let flakes = [];
 

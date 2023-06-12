@@ -26,7 +26,7 @@ const Rain = ({ randomInt }) => {
       rainCtx.beginPath();
       rainCtx.moveTo(x, y);
       rainCtx.lineTo(x, y + size * speed);
-      rainCtx.strokeStyle = 'rgba(174,194,224,0.8)';
+      rainCtx.strokeStyle = 'rgba( 	156,174,201,0.8)';
       rainCtx.lineWidth = 1;
       rainCtx.lineCap = 'round';
       rainCtx.stroke();

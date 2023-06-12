@@ -1,13 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 
-const Clouds = () => {
+const Clouds = ({ width, height }) => {
   const cloudsRef = useRef(null);
 
   useEffect(() => {
     const cloudsCanvas = cloudsRef.current;
     const cloudsCtx = cloudsCanvas.getContext('2d');
     let cloudsId;
-
+    cloudsCanvas.width = width;
+    cloudsCanvas.height = height;
     let clouds = [];
 
     const addCloud = () => {

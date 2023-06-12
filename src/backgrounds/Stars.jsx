@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-const Stars = () => {
+const Stars = ({ width, height }) => {
   const starsRef = useRef(null);
 
   useEffect(() => {
@@ -8,6 +8,9 @@ const Stars = () => {
 
     const starsCtx = starsCanvas.getContext('2d');
     let starsId;
+
+    starsCanvas.width = width;
+    starsCanvas.height = height;
 
     let circles = [];
 

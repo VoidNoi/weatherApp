@@ -4,19 +4,21 @@ import Clouds from '../backgrounds/Clouds';
 import Lightning from '../backgrounds/Lightning';
 import Rain from '../backgrounds/Rain';
 import Snow from '../backgrounds/Snow';
+import useWindowSize from '../utils/useWindowSize';
 
 const Background = ({ isDayTime, weatherType }) => {
   let dayTime = isDayTime ? 'day' : 'night';
-
   const randomInt = (min, max) => {
     return Math.random() * (max - min + 1) + min;
   };
+
+  let [width, height] = useWindowSize();
 
   const forecasts = [
     {
       conditions: ['Clouds', 'Mist', 'Haze'],
       background: dayTime,
-      animation: <Clouds />,
+      animation: <Clouds width={width} height={height} />,
     },
     {
       conditions: ['Drizzle', 'Rain'],
@@ -36,12 +38,12 @@ const Background = ({ isDayTime, weatherType }) => {
     {
       conditions: ['Clear'],
       background: dayTime,
-      animation: isDayTime ? '' : <Stars />,
+      animation: isDayTime ? '' : <Stars width={width} height={height} />,
     },
     {
       conditions: ['Snow'],
       background: dayTime,
-      animation: <Snow randomInt={randomInt} />,
+      animation: <Snow randomInt={randomInt} width={width} height={height} />,
     },
   ];
 
